@@ -1,0 +1,6 @@
+- description: request_otp_success
+  request:
+    url: ^/otp$
+    method: GET
+  response:
+    status: 200
