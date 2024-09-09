@@ -5,7 +5,7 @@ import 'package:otp_getx/screens/otp_screen_controller.dart';
 
 class OtpScreen extends StatelessWidget {
   final OtpScreenController otpScreenController =
-      Get.put(OtpScreenController());
+      Get.find();
 
   OtpScreen({super.key});
 

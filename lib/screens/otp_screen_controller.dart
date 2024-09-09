@@ -10,7 +10,7 @@ class OtpScreenController extends GetxController {
 
   OtpScreenController(
       {this.navigation = const OtpNavigation(),
-      this.otpRepository = const OtpRepository()});
+      required this.otpRepository});
 
   Future<void> onOtpChanged(String value) async {
     if (value.length < 6) return;

@@ -1,24 +1,20 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/instance_manager.dart';
-
+import 'package:http/http.dart';
 import 'package:otp_getx/main.dart';
+import 'package:otp_getx/screens/otp_repository.dart';
 import 'package:otp_getx/screens/otp_screen_controller.dart';
 
 void main() {
-  testWidgets('Show loading at the beginning.', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-    //await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
+  setUp((){
+    Get.put(OtpScreenController(otpRepository: OtpRepository(httpClient: Client())));
+  });
+  
+  testWidgets('Show loading at the beginning.', (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+
     expect(find.byKey(const Key('loading')), findsOneWidget);
     await tester.pumpAndSettle();
   });
