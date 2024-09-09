@@ -6,12 +6,12 @@ import 'package:otp_getx/screens/otp_screen_controller.dart';
 
 class MockOtpNavigation extends Mock implements OtpNavigation {}
 
-class MockOtpRepository extends Mock implements OtpRepository {}
+class MockOtpRepository extends Mock implements OtpAPI {}
 
 void main() {
   late OtpScreenController controller;
   late OtpNavigation otpNavigation;
-  late OtpRepository otpRepository;
+  late OtpAPI otpRepository;
 
   setUp(() {
     otpNavigation = MockOtpNavigation();

@@ -6,7 +6,7 @@ class OtpScreenController extends GetxController {
   RxBool isLoading = true.obs;
 
   late OtpNavigation navigation;
-  late OtpRepository otpRepository;
+  late OtpAPI otpRepository;
 
   OtpScreenController(
       {this.navigation = const OtpNavigation(),

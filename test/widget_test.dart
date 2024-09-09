@@ -9,7 +9,7 @@ import 'package:otp_getx/screens/otp_screen_controller.dart';
 void main() {
 
   setUp((){
-    Get.put(OtpScreenController(otpRepository: OtpRepository(httpClient: Client())));
+    Get.put(OtpScreenController(otpRepository: OtpAPI(httpClient: Client())));
   });
   
   testWidgets('Show loading at the beginning.', (WidgetTester tester) async {

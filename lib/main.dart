@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    Get.put(OtpScreenController(otpRepository: OtpRepository(httpClient: Client())));
+    Get.put(OtpScreenController(otpRepository: OtpAPI(httpClient: Client())));
     
     return GetMaterialApp(
       title: 'Flutter Demo',
