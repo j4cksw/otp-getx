@@ -8,8 +8,6 @@ enum OtpScreenStates {
 
 class OtpScreenController extends GetxController {
   
-  RxBool isLoading = true.obs;
-
   Rx<OtpScreenStates> state = OtpScreenStates.loadding.obs;
 
   late OtpNavigation navigation;
@@ -22,13 +20,13 @@ class OtpScreenController extends GetxController {
   Future<void> onOtpChanged(String value) async {
     if (value.length < 6) return;
 
-    isLoading.value = true;
+    state.value = OtpScreenStates.loadding;
     await otpRepository.verifyOtp();
     navigation.toSuccess();
   }
 
   Future<void> requestOtp() async {
     await otpRepository.requestOtp();
-    isLoading.value = false;
+    state.value = OtpScreenStates.loaded;
   }
 }

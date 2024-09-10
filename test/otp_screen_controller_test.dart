@@ -21,23 +21,23 @@ void main() {
   });
 
   group('requestOtp', () {
-    test('should set loading to true when start', () {
+    test('should set loading state when start', () {
       when(() => otpRepository.requestOtp())
           .thenAnswer((_) => Future.delayed(const Duration()));
 
       controller.requestOtp();
 
-      expect(controller.isLoading.value, true);
+      expect(controller.state.value, OtpScreenStates.loadding);
       verify(() => otpRepository.requestOtp());
     });
 
-    test('should set loading to false when get response', () async {
+    test('should set loaded state when get response', () async {
       when(() => otpRepository.requestOtp())
           .thenAnswer((_) => Future.delayed(const Duration()));
 
       await controller.requestOtp();
 
-      expect(controller.isLoading.value, false);
+      expect(controller.state.value, OtpScreenStates.loaded);
     });
   });
 
@@ -45,11 +45,10 @@ void main() {
     test('should set loading to true when input complete OTP code', () async {
       when(() => otpRepository.verifyOtp())
           .thenAnswer((_) => Future.delayed(const Duration()));
-      controller.isLoading.value = false;
-
+      controller.state.value = OtpScreenStates.loaded;
       await controller.onOtpChanged('123456');
 
-      expect(controller.isLoading.value, true);
+      expect(controller.state.value, OtpScreenStates.loadding);
       verify(() => otpNavigation.toSuccess());
     });
 
@@ -57,11 +56,11 @@ void main() {
       test(
           'should NOT set loading to true when input partial OTP code $testCase',
           () async {
-        controller.isLoading.value = false;
+        controller.state.value = OtpScreenStates.loaded;
 
         await controller.onOtpChanged(testCase);
 
-        expect(controller.isLoading.value, false);
+        expect(controller.state.value, OtpScreenStates.loaded);
         verifyNever(() => otpNavigation.toSuccess());
       });
     }
