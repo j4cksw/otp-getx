@@ -21,9 +21,11 @@ class OtpScreen extends StatelessWidget {
   }
 
   Widget _renderByLoadingState() {
-    return otpScreenController.isLoading.value
-        ? _renderLoading()
-        : _renderOtpInput();
+    return switch(otpScreenController.state.value) {
+      OtpScreenStates.error => const Text('Error', key: Key('error_request_otp'),),
+      OtpScreenStates.loadding => _renderLoading(),
+      OtpScreenStates.loaded => _renderOtpInput(),
+    };
   }
 
   Widget _renderOtpInput() {
