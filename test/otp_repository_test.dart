@@ -29,6 +29,17 @@ void main() {
 
       verify(() => httpClient.get(Uri.parse('http://localhost:8882/otp')));
     });
+
+    test('should throw error when response code is not 200', () async {
+      final response = MockResponse();
+      when(() => response.statusCode).thenReturn(400);
+      when(() => response.body).thenReturn('');
+      when(() => httpClient.get(any()))
+          .thenAnswer((_) => Future.value(response));
+
+      expect(() async => await repo.requestOtp(), throwsA(isA<RequestOTPError>()));
+      verify(() => httpClient.get(Uri.parse('http://localhost:8882/otp')));
+    });
   });
 
   group('verifyOtp', () {

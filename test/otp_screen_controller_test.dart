@@ -39,6 +39,14 @@ void main() {
 
       expect(controller.state.value, OtpScreenStates.loaded);
     });
+
+    test('should set error state when get error response', () async {
+      when(() => otpRepository.requestOtp()).thenThrow(RequestOTPError());
+
+      await controller.requestOtp();
+
+      expect(controller.state.value, OtpScreenStates.error);
+    });
   });
 
   group('onOtpChanged', () {
