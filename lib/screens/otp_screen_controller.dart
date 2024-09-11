@@ -30,5 +30,4 @@ class OtpScreenController extends GetxController {
     navigation.toSuccess();
   }
 
-
 }

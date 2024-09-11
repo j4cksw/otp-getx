@@ -6,17 +6,19 @@ import 'package:otp_getx/screens/otp_screen.dart';
 import 'package:otp_getx/screens/otp_screen_controller.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp(httpClient: Client()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Client httpClient;
+
+  const MyApp({super.key, required this.httpClient});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
 
-    Get.put(OtpScreenController(otpRepository: OtpAPI(httpClient: Client())));
+    Get.put(OtpScreenController(otpRepository: OtpAPI(httpClient: httpClient)));
     
     return GetMaterialApp(
       title: 'Flutter Demo',
