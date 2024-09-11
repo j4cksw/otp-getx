@@ -21,15 +21,22 @@ void main() {
   });
 
   group('requestOtp', () {
-    test('should set loading state when start', () {
-      when(() => otpRepository.requestOtp())
-          .thenAnswer((_) => Future.delayed(const Duration()));
+    for (var testCase in [
+      OtpScreenStates.loadding,
+      OtpScreenStates.loaded,
+      OtpScreenStates.error
+    ]) {
+      test('should set loading state when start from $testCase', () {
+        when(() => otpRepository.requestOtp())
+            .thenAnswer((_) => Future.delayed(const Duration(seconds: 10)));
+        controller.state.value = testCase;
 
-      controller.requestOtp();
+        controller.requestOtp();
 
-      expect(controller.state.value, OtpScreenStates.loadding);
-      verify(() => otpRepository.requestOtp());
-    });
+        expect(controller.state.value, OtpScreenStates.loadding);
+        verify(() => otpRepository.requestOtp());
+      });
+    }
 
     test('should set loaded state when get response', () async {
       when(() => otpRepository.requestOtp())

@@ -14,6 +14,7 @@ class OtpScreenController extends GetxController {
       {this.navigation = const OtpNavigation(), required this.otpRepository});
 
   Future<void> requestOtp() async {
+    state.value = OtpScreenStates.loadding;
     try {
       await otpRepository.requestOtp();
       state.value = OtpScreenStates.loaded;

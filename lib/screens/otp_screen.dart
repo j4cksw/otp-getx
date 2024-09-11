@@ -4,8 +4,7 @@ import 'package:get/instance_manager.dart';
 import 'package:otp_getx/screens/otp_screen_controller.dart';
 
 class OtpScreen extends StatelessWidget {
-  final OtpScreenController otpScreenController =
-      Get.find();
+  final OtpScreenController otpScreenController = Get.find();
 
   OtpScreen({super.key});
 
@@ -21,12 +20,26 @@ class OtpScreen extends StatelessWidget {
   }
 
   Widget _renderByLoadingState() {
-    return switch(otpScreenController.state.value) {
-      OtpScreenStates.error => const Text('Error', key: Key('error_request_otp'),),
+    return switch (otpScreenController.state.value) {
+      OtpScreenStates.error => _renderError(),
       OtpScreenStates.loadding => _renderLoading(),
       OtpScreenStates.loaded => _renderOtpInput(),
     };
   }
+
+  Widget _renderError() => Column(
+        key: const Key('error_request_otp'),
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            'Error, please try again.',
+          ),
+          TextButton(
+              key: const Key('error_request_otp_retry'),
+              onPressed: otpScreenController.requestOtp,
+              child: const Text('RETRY')),
+        ],
+      );
 
   Widget _renderOtpInput() {
     return Padding(

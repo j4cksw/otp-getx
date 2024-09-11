@@ -65,18 +65,22 @@ void main() {
     // Should see error message
     expect(find.byKey(const Key('error_request_otp')), findsOneWidget);
 
-    // TODO: Hit retry button should be able to request OTP again
+    // Hit retry button should see loading again
+    await tester.tap(find.byKey(const Key('error_request_otp_retry')));
+    await tester.pump();
+
+    expect(find.byKey(const Key('loading')), findsOne);
   });
 }
 
 void _arrangeVerifySuccess(MockHttpClient mockHttpClient) {
   when(() => mockHttpClient.get(Uri.parse('http://localhost:8882/otp')))
-      .thenAnswer((_) async => http.Response('{}', 200));
+      .thenAnswer((_) async => await Future.delayed(const Duration(seconds: 1), ()=>http.Response('{}', 200)));
   when(() => mockHttpClient.post(Uri.parse('http://localhost:8882/otp')))
-      .thenAnswer((_) async => http.Response('{}', 200));
+      .thenAnswer((_) async => await Future.delayed(const Duration(seconds: 1), ()=>http.Response('{}', 200)));
 }
 
 void _arrangeFailedOnRequestOTP(MockHttpClient mockHttpClient) {
   when(() => mockHttpClient.get(Uri.parse('http://localhost:8882/otp')))
-      .thenAnswer((_) async => http.Response('{}', 400));
+      .thenAnswer((_) async => await Future.delayed(const Duration(seconds: 1), ()=>http.Response('{}', 400)));
 }
