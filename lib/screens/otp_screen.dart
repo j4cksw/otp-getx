@@ -47,6 +47,11 @@ class OtpScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Text(
+            'OTP code was sent to ${otpScreenController.phoneNumber}',
+            style: const TextStyle(fontSize: 24),
+          ),
+          const SizedBox(height: 48,),
           const Text(
             'OTP input here',
           ),

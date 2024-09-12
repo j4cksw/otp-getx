@@ -14,6 +14,7 @@ void main() {
 
   setUp(() {
     mockController = MockOtpScreenController();
+    when(() => mockController.phoneNumber).thenReturn("".obs);
     when(() => mockController.requestOtp(),).thenAnswer((_)=>Future.value());
   });
 
@@ -34,6 +35,15 @@ void main() {
 
     expect(find.byKey(const Key('loading')), findsNothing);
     expect(find.byKey(const Key('otp_input')), findsOneWidget);
+  });
+
+  testWidgets('Show OTP sent message when loading finished', (WidgetTester tester) async {
+    when(() => mockController.phoneNumber).thenReturn('086***7909'.obs);
+    when(() => mockController.state).thenReturn(OtpScreenStates.loaded.obs);
+
+    await tester.pumpWidget(_createOtpScreen(mockController));
+
+    expect(find.text('OTP code was sent to 086***7909'), findsOneWidget);
   });
 
   testWidgets('show loading when input OTP code completed',

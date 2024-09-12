@@ -19,14 +19,14 @@ void main() {
 
   group('requestOtp', () {
     test('should get request', () async {
-      final response = MockResponse();
-      when(() => response.statusCode).thenReturn(200);
-      when(() => response.body).thenReturn('');
-      when(() => httpClient.get(any()))
-          .thenAnswer((_) => Future.value(response));
+      when(() => httpClient.get(Uri.parse('http://localhost:8882/otp')))
+          .thenAnswer((_) async => await Future.delayed(
+              const Duration(seconds: 1),
+              () => http.Response('{"phoneNumber":"0867937909"}', 200)));
 
-      await repo.requestOtp();
+      final resposne = await repo.requestOtp();
 
+      expect(resposne.phoneNumber, '0867937909');
       verify(() => httpClient.get(Uri.parse('http://localhost:8882/otp')));
     });
 
@@ -37,7 +37,8 @@ void main() {
       when(() => httpClient.get(any()))
           .thenAnswer((_) => Future.value(response));
 
-      expect(() async => await repo.requestOtp(), throwsA(isA<RequestOTPError>()));
+      expect(
+          () async => await repo.requestOtp(), throwsA(isA<RequestOTPError>()));
       verify(() => httpClient.get(Uri.parse('http://localhost:8882/otp')));
     });
   });

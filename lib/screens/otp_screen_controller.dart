@@ -6,6 +6,7 @@ enum OtpScreenStates { loadding, loaded, error }
 
 class OtpScreenController extends GetxController {
   Rx<OtpScreenStates> state = OtpScreenStates.loadding.obs;
+  RxString phoneNumber = ''.obs;
 
   late OtpNavigation navigation;
   late OtpAPI otpRepository;
@@ -16,7 +17,8 @@ class OtpScreenController extends GetxController {
   Future<void> requestOtp() async {
     state.value = OtpScreenStates.loadding;
     try {
-      await otpRepository.requestOtp();
+      final response = await otpRepository.requestOtp();
+      phoneNumber.value = mask(response.phoneNumber);
       state.value = OtpScreenStates.loaded;
     } catch (_) {
       state.value = OtpScreenStates.error;
@@ -31,4 +33,15 @@ class OtpScreenController extends GetxController {
     navigation.toSuccess();
   }
 
+  String mask(String input, {int visibleStart = 3, int visibleEnd = 4}) {
+    if (input.length <= visibleStart + visibleEnd) {
+      return input;
+    }
+
+    String start = input.substring(0, visibleStart);
+    String end = input.substring(input.length - visibleEnd);
+    String masked = '*' * (input.length - visibleStart - visibleEnd);
+
+    return start + masked + end;
+  }
 }

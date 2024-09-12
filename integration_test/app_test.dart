@@ -71,16 +71,32 @@ void main() {
 
     expect(find.byKey(const Key('loading')), findsOne);
   });
+
+  testWidgets('User can get a hint of OTP sent to his phone',
+      (WidgetTester tester) async {
+    _arrangeVerifySuccess(mockHttpClient);
+
+    await tester.pumpWidget(MyApp(httpClient: mockHttpClient));
+
+    // Wait until loading finished
+    await tester.pumpAndSettle();
+
+    // Should see otp sent message masked phone number
+    expect(find.text('OTP code was sent to 086***7909'), findsOneWidget);
+  });
 }
 
 void _arrangeVerifySuccess(MockHttpClient mockHttpClient) {
   when(() => mockHttpClient.get(Uri.parse('http://localhost:8882/otp')))
-      .thenAnswer((_) async => await Future.delayed(const Duration(seconds: 1), ()=>http.Response('{}', 200)));
+      .thenAnswer((_) async => await Future.delayed(
+          const Duration(seconds: 1), () => http.Response('{"phoneNumber":"0867937909"}', 200)));
   when(() => mockHttpClient.post(Uri.parse('http://localhost:8882/otp')))
-      .thenAnswer((_) async => await Future.delayed(const Duration(seconds: 1), ()=>http.Response('{}', 200)));
+      .thenAnswer((_) async => await Future.delayed(
+          const Duration(seconds: 1), () => http.Response('{}', 200)));
 }
 
 void _arrangeFailedOnRequestOTP(MockHttpClient mockHttpClient) {
   when(() => mockHttpClient.get(Uri.parse('http://localhost:8882/otp')))
-      .thenAnswer((_) async => await Future.delayed(const Duration(seconds: 1), ()=>http.Response('{}', 400)));
+      .thenAnswer((_) async => await Future.delayed(
+          const Duration(seconds: 1), () => http.Response('{}', 400)));
 }

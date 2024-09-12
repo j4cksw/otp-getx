@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:otp_getx/screens/otp_navigation.dart';
 import 'package:otp_getx/screens/otp_repository.dart';
+import 'package:otp_getx/screens/otp_response.dart';
 import 'package:otp_getx/screens/otp_screen_controller.dart';
 
 class MockOtpNavigation extends Mock implements OtpNavigation {}
@@ -27,8 +28,8 @@ void main() {
       OtpScreenStates.error
     ]) {
       test('should set loading state when start from $testCase', () {
-        when(() => otpRepository.requestOtp())
-            .thenAnswer((_) => Future.delayed(const Duration(seconds: 10)));
+        _arrangeRequestOTPSuccess(otpRepository);
+
         controller.state.value = testCase;
 
         controller.requestOtp();
@@ -39,12 +40,19 @@ void main() {
     }
 
     test('should set loaded state when get response', () async {
-      when(() => otpRepository.requestOtp())
-          .thenAnswer((_) => Future.delayed(const Duration()));
+      _arrangeRequestOTPSuccess(otpRepository);
 
       await controller.requestOtp();
 
       expect(controller.state.value, OtpScreenStates.loaded);
+    });
+
+    test('should set phone number when get response', () async {
+      _arrangeRequestOTPSuccess(otpRepository);
+
+      await controller.requestOtp();
+
+      expect(controller.phoneNumber.value, '086***7909');
     });
 
     test('should set error state when get error response', () async {
@@ -80,4 +88,9 @@ void main() {
       });
     }
   });
+}
+
+void _arrangeRequestOTPSuccess(OtpAPI otpRepository) {
+  when(() => otpRepository.requestOtp()).thenAnswer(
+      (_) => Future.value(RequestOtpResponse(phoneNumber: '0867937909')));
 }

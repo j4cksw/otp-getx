@@ -38,6 +38,7 @@ dependencies:
   get: ^4.6.6
   mocktail: ^1.0.4
   http: ^1.2.2
+  mask_text_input_formatter: ^2.9.0
 
 dev_dependencies:
   integration_test:
