@@ -69,10 +69,30 @@ void main() {
       when(() => otpRepository.verifyOtp())
           .thenAnswer((_) => Future.delayed(const Duration()));
       controller.state.value = OtpScreenStates.loaded;
-      await controller.onOtpChanged('123456');
+
+      controller.onOtpChanged('123456');
 
       expect(controller.state.value, OtpScreenStates.loadding);
+    });
+
+    test('should navigate to success screen when verify success', () async {
+      when(() => otpRepository.verifyOtp())
+          .thenAnswer((_) => Future.delayed(const Duration()));
+      controller.state.value = OtpScreenStates.loaded;
+
+      await controller.onOtpChanged('123456');
+
       verify(() => otpNavigation.toSuccess());
+    });
+
+    test('should set error state when verify fail', () async {
+      when(() => otpRepository.verifyOtp())
+          .thenThrow(VerifyOTPError());
+      controller.state.value = OtpScreenStates.loaded;
+
+      await controller.onOtpChanged('123456');
+
+      expect(controller.state.value, OtpScreenStates.error);
     });
 
     for (var testCase in ['1', '12', '123', '1234', '12345']) {

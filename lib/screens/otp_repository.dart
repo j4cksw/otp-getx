@@ -9,8 +9,9 @@ class OtpAPI {
   OtpAPI({required this.httpClient});
 
   Future<RequestOtpResponse> requestOtp() async {
-    final response = await httpClient.get(Uri.parse('http://localhost:8882/otp'));
-    if(response.statusCode!=200) {
+    final response =
+        await httpClient.get(Uri.parse('http://localhost:8882/otp'));
+    if (response.statusCode != 200) {
       throw RequestOTPError();
     }
 
@@ -18,9 +19,13 @@ class OtpAPI {
   }
 
   Future<void> verifyOtp() async {
-    await httpClient.post(Uri.parse('http://localhost:8882/otp'));
+    final response = await httpClient.post(Uri.parse('http://localhost:8882/otp'));
+    if (response.statusCode != 200) {
+      throw VerifyOTPError();
+    }
   }
 }
 
-class RequestOTPError {
-}
+class RequestOTPError {}
+
+class VerifyOTPError {}

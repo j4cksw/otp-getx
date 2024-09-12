@@ -29,8 +29,12 @@ class OtpScreenController extends GetxController {
     if (value.length < 6) return;
 
     state.value = OtpScreenStates.loadding;
-    await otpRepository.verifyOtp();
-    navigation.toSuccess();
+    try {
+      await otpRepository.verifyOtp();
+      navigation.toSuccess();
+    } catch (_) {
+      state.value = OtpScreenStates.error;
+    }
   }
 
   String mask(String input, {int visibleStart = 3, int visibleEnd = 4}) {
