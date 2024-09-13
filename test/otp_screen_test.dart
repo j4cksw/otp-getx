@@ -26,7 +26,8 @@ void main() {
     ).thenAnswer((_) => Future.value());
 
     mockOtpTimerController = MockOtpTimerController();
-    when(() => mockOtpTimerController.state).thenReturn(OtpTimerState.started.obs);
+    when(() => mockOtpTimerController.state)
+        .thenReturn(OtpTimerState.started.obs);
     when(() => mockOtpTimerController.time).thenReturn(''.obs);
   });
 
@@ -47,6 +48,7 @@ void main() {
 
     expect(find.byKey(const Key('loading')), findsOneWidget);
     verify(() => mockOtpController.requestOtp());
+    verify(() => mockOtpTimerController.start());
   });
 
   testWidgets('Show OTP input when loading finished',
@@ -100,7 +102,8 @@ void main() {
     expect(find.text('01:00'), findsOneWidget);
   });
 
-  testWidgets('should show resend button when timer stop', (WidgetTester tester) async {
+  testWidgets('should show resend button when timer stop',
+      (WidgetTester tester) async {
     when(() => mockOtpController.state).thenReturn(OtpScreenStates.loaded.obs);
     when(() => mockOtpTimerController.time).thenReturn('01:00'.obs);
     when(() => mockOtpTimerController.state).thenReturn(OtpTimerState.stop.obs);
@@ -110,7 +113,7 @@ void main() {
     expect(find.byKey(const Key('resend')), findsOneWidget);
     await tester.tap(find.byKey(const Key('resend')));
 
-    verify(()=>mockOtpController.requestOtp()).called(2);
+    verify(() => mockOtpController.requestOtp()).called(2);
+    verify(() => mockOtpTimerController.start()).called(2);
   });
-
 }

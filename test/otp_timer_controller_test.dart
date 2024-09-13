@@ -25,11 +25,22 @@ void main() {
     expect(controller.time.value, '01:00');
   });
 
-    test('should set time value with the timer progress ', () async {
+  test('should set time value with the timer progress ', () async {
     final controller = OtpTimerController();
 
     controller.start();
+    await Future.delayed(const Duration(seconds: 1));
 
-    expect(controller.time.value, '01:00');
+    expect(controller.time.value, '00:59');
+  });
+
+  test('should set state to stop when time-up', () async {
+    final controller = OtpTimerController(waitingTime: const Duration(seconds: 1));
+
+    controller.start();
+    await Future.delayed(const Duration(seconds: 1));
+
+    expect(controller.time.value, '00:00');
+    expect(controller.state.value, OtpTimerState.stop);
   });
 }

@@ -128,7 +128,7 @@ void main() {
     // Wait until loading finished
     await tester.pumpAndSettle();
 
-    expect(find.text('01:00'), findsOneWidget);
+    expect(find.text('00:59'), findsOneWidget);
 
     // Wait for re-send timer
     await tester.pumpAndSettle(const Duration(minutes: 1));

@@ -12,13 +12,18 @@ class OtpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    otpScreenController.requestOtp();
+    _init();
 
     return Scaffold(
       body: Center(
         child: Obx(() => _renderByLoadingState()),
       ),
     );
+  }
+
+  void _init() {
+    otpScreenController.requestOtp();
+    otpTimerController.start();
   }
 
   Widget _renderByLoadingState() {
@@ -75,7 +80,7 @@ class OtpScreen extends StatelessWidget {
       OtpTimerState.started => Text(otpTimerController.time.value),
       OtpTimerState.stop => TextButton(
           key: const Key('resend'),
-          onPressed: otpScreenController.requestOtp,
+          onPressed: _init,
           child: const Text('RESEND'))
     };
   }
