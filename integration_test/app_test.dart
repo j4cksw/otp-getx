@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
@@ -116,6 +118,28 @@ void main() {
 
     // Should see otp sent message masked phone number
     expect(find.text('OTP code was sent to 086***7909'), findsOneWidget);
+  });
+
+  testWidgets('User can resend after wait for 1 minute', (WidgetTester tester) async {
+    _arrangeVerifySuccess(mockHttpClient);
+
+    await tester.pumpWidget(MyApp(httpClient: mockHttpClient));
+
+    // Wait until loading finished
+    await tester.pumpAndSettle();
+
+    expect(find.text('01:00'), findsOneWidget);
+
+    // Wait for re-send timer
+    await tester.pumpAndSettle(const Duration(minutes: 1));
+
+    // Find and tap on resend button
+    expect(find.byKey(const Key('resend')), findsOneWidget);
+    await tester.tap(find.byKey(const Key('resend')));
+    await tester.pump();
+
+    // Should see loading again.
+    expect(find.byKey(const Key('loading')), findsOne);
   });
 }
 

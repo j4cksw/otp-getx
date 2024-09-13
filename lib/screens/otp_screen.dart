@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:otp_getx/screens/otp_screen_controller.dart';
+import 'package:otp_getx/screens/otp_timer_controller.dart';
 
 class OtpScreen extends StatelessWidget {
   final OtpScreenController otpScreenController = Get.find();
+  final OtpTimerController otpTimerController = Get.find();
 
   OtpScreen({super.key});
 
@@ -51,7 +53,9 @@ class OtpScreen extends StatelessWidget {
             'OTP code was sent to ${otpScreenController.phoneNumber}',
             style: const TextStyle(fontSize: 24),
           ),
-          const SizedBox(height: 48,),
+          const SizedBox(
+            height: 48,
+          ),
           const Text(
             'OTP input here',
           ),
@@ -59,10 +63,21 @@ class OtpScreen extends StatelessWidget {
             key: const Key('otp_input'),
             onChanged: otpScreenController.onOtpChanged,
             textAlign: TextAlign.center,
-          )
+          ),
+          _renderResend(),
         ],
       ),
     );
+  }
+
+  Widget _renderResend() {
+    return switch (otpTimerController.state.value) {
+      OtpTimerState.started => Text(otpTimerController.time.value),
+      OtpTimerState.stop => TextButton(
+          key: const Key('resend'),
+          onPressed: otpScreenController.requestOtp,
+          child: const Text('RESEND'))
+    };
   }
 
   Widget _renderLoading() {
